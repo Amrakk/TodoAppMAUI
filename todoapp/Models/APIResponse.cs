@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace todoapp.Models
 {
-    public class Response
+    public class APIResponse
     {
-        public string message { get; set; }
+        public string message { get; set; } = "";
     }
 }

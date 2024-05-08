@@ -9,8 +9,8 @@ namespace todoapp.Services
 {
     public interface ITodoService
     {
-        Task<List<Todo>> GetTasksAsync();
-        Task SaveTaskAsync(Todo item, bool isNewItem);
-        Task DeleteTaskAsync(Todo item);
+        Task<List<Todo>> GetTodosAsync();
+        Task<bool> SaveTodoAsync(Todo item, bool isNewItem);
+        Task<bool> DeleteTodoAsync(Todo item);
     }
 }

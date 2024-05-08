@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="todoapp.Views.SignupPage"
+             xmlns:viewmodel="clr-namespace:todoapp.ViewModels"
+             x:DataType="viewmodel:AuthViewModel"
+             Title="SignupPage">
+    
+    <Grid BackgroundColor="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="220" />
+            <RowDefinition Height="600" />
+            <RowDefinition Height="50" />
+        </Grid.RowDefinitions>
+
+        <Path Stroke="RoyalBlue" Data="m0.30000,0l449,0l0,128.48327c-122.5,65.30167 -332.5,65.89076 -450,7.2429c0,-45.25313 0,-90.47304 0,-135.72617z" Fill="RoyalBlue" />
+
+        <StackLayout>
+            <Frame BackgroundColor="SkyBlue" HeightRequest="120" WidthRequest="120" CornerRadius="60" Padding="0" Margin="0, 100, 0, 0" HorizontalOptions="Center">
+                <Image Source="todologo.png" Aspect="AspectFill"></Image>
+            </Frame>
+        </StackLayout>
+
+        <Grid RowSpacing="5" Grid.Row="1" Margin="20,20,20,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="40" />
+                <RowDefinition Height="40" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Label Grid.Row="1" Text="Welcome!" HorizontalOptions="Center" FontSize="Title" FontAttributes="Bold" Padding="0" Margin="0"/>
+            <Label Grid.Row="2" Text="Create a new account" HorizontalOptions="Center" FontSize="Subtitle"/>
+
+            <StackLayout Grid.Row="3" Orientation="Vertical" HorizontalOptions="FillAndExpand">
+                <Frame BackgroundColor="Transparent" BorderColor="DeepSkyBlue" Padding="0" HorizontalOptions="FillAndExpand" CornerRadius="30">
+                    <StackLayout Orientation="Horizontal">
+                        <Frame BackgroundColor="white" HeightRequest="40" WidthRequest="40" CornerRadius="30" Padding="0" Margin="5">
+                            <Image Source="email.png" Aspect="AspectFill" Margin="0" />
+                        </Frame>
+                        <Entry Text="{Binding SignupModel.Email}" Placeholder="Email Address" ReturnType="Next" Keyboard="Email" TextColor="Black" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="FillAndExpand" Margin="0,0,20,0" />
+                    </StackLayout>
+                </Frame>
+                <Frame BackgroundColor="Transparent" BorderColor="DeepSkyBlue" Padding="0" Margin="0,15,0,0" HorizontalOptions="FillAndExpand" CornerRadius="30">
+                    <StackLayout Orientation="Horizontal">
+                        <Frame BackgroundColor="white" HeightRequest="40" WidthRequest="40" CornerRadius="30" Padding="0" Margin="5">
+                            <Image Source="user.png" Aspect="AspectFill" Margin="0" />
+                        </Frame>
+                        <Entry Text="{Binding SignupModel.Username}" Placeholder="Username" ReturnType="Next" Keyboard="Plain" TextColor="Black" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="FillAndExpand" Margin="0,0,20,0" />
+                    </StackLayout>
+                </Frame>
+                <Frame BackgroundColor="Transparent" BorderColor="DeepSkyBlue" Padding="0" Margin="0,15,0,0" HorizontalOptions="FillAndExpand" CornerRadius="30">
+                    <StackLayout Orientation="Horizontal">
+                        <Frame BackgroundColor="white" HeightRequest="40" WidthRequest="40" CornerRadius="30" Padding="0" Margin="5">
+                            <Image Source="lock.png" Aspect="AspectFill" Margin="0"  />
+                        </Frame>
+                        <Entry Text="{Binding SignupModel.Password}" Placeholder="Password" ReturnType="Next" Keyboard="Text" IsPassword="True" TextColor="Black" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="FillAndExpand" Margin="0,0,20,0"  />
+                    </StackLayout>
+                </Frame>
+                <Frame BackgroundColor="Transparent" BorderColor="DeepSkyBlue" Padding="0" Margin="0,15,0,0" HorizontalOptions="FillAndExpand" CornerRadius="30">
+                    <StackLayout Orientation="Horizontal">
+                        <Frame BackgroundColor="white" HeightRequest="40" WidthRequest="40" CornerRadius="30" Padding="0" Margin="5">
+                            <Image Source="confirmpassword.png" Aspect="AspectFill" Margin="0"  />
+                        </Frame>
+                        <Entry Text="{Binding SignupModel.ConfirmPassword}" Keyboard="Text" ReturnType="Done" ReturnCommand="{Binding SignupCommand}" Placeholder="Confirm Password" IsPassword="True" TextColor="Black" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="FillAndExpand" Margin="0,0,20,0"  />
+                    </StackLayout>
+                </Frame>
+
+                <Label Text="{Binding ErrorMessages}" IsVisible="{Binding ErrorMessages, Converter={StaticResource StringLengthToVisibilityConverter}}" TextColor="Red" Margin="0,12,0,15" HorizontalOptions="Center" />
+                <Button Text="SIGNUP" Command="{Binding SignupCommand}" FontAttributes="Bold" FontSize="Body" CornerRadius="30" BackgroundColor="DarkBlue"></Button>
+
+                <StackLayout Orientation="Vertical" Margin="0,60,0,0" Padding="0">
+                    <Label Text="Forgot Password" TextColor="DarkBlue" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center" FontSize="Small" />
+                    <Frame Padding="0" BorderColor="Transparent">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding NavigateToLoginCommand}"/>
+                        </Frame.GestureRecognizers>
+                        <StackLayout Orientation="Horizontal" Margin="0,5,0,0" Padding="0" HorizontalOptions="CenterAndExpand">
+                            <Label Text="Already have an account?" TextColor="DarkGray" FontSize="Small" />
+                            <Label Text=" Login" TextColor="DarkBlue" FontSize="Small" FontAttributes="Bold" />
+                        </StackLayout>
+                    </Frame>
+                </StackLayout>
+            </StackLayout>
+        </Grid>
+
+    </Grid>
+
+</ContentPage>

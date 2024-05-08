@@ -1,5 +1,8 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using todoapp.Views;
 using todoapp.Services;
+using todoapp.ViewModels;
+using Microsoft.Extensions.Logging;
+using CommunityToolkit.Maui;
 
 namespace todoapp
 {
@@ -10,6 +13,7 @@ namespace todoapp
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                .UseMauiCommunityToolkit()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -23,10 +27,17 @@ namespace todoapp
             builder.Services.AddSingleton<IHttpsClientHandlerService, HttpsClientHandlerService>();
             builder.Services.AddSingleton<RestService>();
             builder.Services.AddSingleton<ITodoService, TodoService>();
+            builder.Services.AddSingleton<IAuthService, AuthService>();
 
-            builder.Services.AddSingleton<MainPage>();
+            builder.Services.AddSingleton<AuthViewModel>();
+            builder.Services.AddSingleton<TodoViewModel>();
 
-
+            builder.Services.AddTransient<LoginPage>();
+            builder.Services.AddTransient<SignupPage>();
+            //builder.Services.AddSingleton<ForgotPasswordPage>();
+            //builder.Services.AddSingleton<ResetPasswordPage>();
+            builder.Services.AddTransient<TodosPage>();
+            builder.Services.AddTransient<LoadingPage>();
 
             return builder.Build();
         }

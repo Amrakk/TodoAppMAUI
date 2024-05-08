@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodel="clr-namespace:todoapp.ViewModels"
+             xmlns:models="clr-namespace:todoapp.Models"
+             x:DataType="viewmodel:TodoViewModel" 
+             xmlns:mct="clr-namespace:CommunityToolkit.Maui.Behaviors;assembly=CommunityToolkit.Maui"
+             x:Name="todopage"
+             Title="{Binding Username}"
+             x:Class="todoapp.Views.TodosPage" >
+
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior IsVisible="False" IsEnabled="False" />
+    </Shell.BackButtonBehavior>
+
+    <ContentPage.Behaviors>
+        <mct:StatusBarBehavior StatusBarColor="RoyalBlue" />
+    </ContentPage.Behaviors>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Sign out" Clicked="OnLogoutClicked"/>
+    </ContentPage.ToolbarItems>
+
+    <ScrollView> 
+        <VerticalStackLayout Padding="30,20" Spacing="20" VerticalOptions="FillAndExpand" Margin="0,10,0,0" >
+            <VerticalStackLayout Margin="0,0,0,15">
+                <Image Source="todologo.png" HeightRequest="150" />
+            </VerticalStackLayout>
+
+            <Grid ColumnDefinitions="*, 100" >
+                <Frame Padding="10, 5" Grid.Column="0" Margin="0, 0, 10, 0">
+                    <Entry Placeholder="Todo item" Text="{Binding TodoEntryText}" ReturnType="Done" ReturnCommand="{Binding AddTodoCommand}" />
+                </Frame>
+                <Button Text="Add" Command="{Binding AddTodoCommand}" Grid.Column="1" TextColor="#eee" IsEnabled="{Binding IsNotBusy}"/>
+            </Grid>
+
+            <VerticalStackLayout VerticalOptions="FillAndExpand" >
+                    <CollectionView ItemsSource="{Binding TodoList}">
+
+                        <CollectionView.EmptyView>
+                            <VerticalStackLayout>
+                                <Label Text="{Binding EmptyText}" FontSize="Medium" TextColor="#eee"/>
+                            </VerticalStackLayout>
+                        </CollectionView.EmptyView>
+
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="models:Todo">
+                                <Frame Padding="15, 10" Margin="0, 0, 0, 17" BackgroundColor="AliceBlue" BorderColor="Transparent">
+                                    <Grid ColumnDefinitions="*, auto, auto">
+                                        <HorizontalStackLayout>
+                                            <CheckBox IsChecked="{Binding completed}">
+                                                <CheckBox.GestureRecognizers>
+                                                    <TapGestureRecognizer Command="{Binding Path=BindingContext.CheckTodoCommand, Source={x:Reference Name=todopage}}" CommandParameter="{Binding .}"/>
+                                                </CheckBox.GestureRecognizers>
+                                            </CheckBox>
+                                            <Label WidthRequest="130" LineBreakMode="WordWrap" Text="{Binding content}" FontSize="Small" Grid.Column="1" VerticalOptions="Center" TextColor="{StaticResource Primary}">
+                                                <Label.GestureRecognizers>
+                                                    <TapGestureRecognizer Command="{Binding Path=BindingContext.CheckTodoCommand, Source={x:Reference Name=todopage}}" CommandParameter="{Binding .}"/>
+                                                </Label.GestureRecognizers>
+                                            </Label>
+                                        </HorizontalStackLayout>
+                                        <Button Grid.Column="1" Text="Edit" IsEnabled="{Binding Path=BindingContext.IsNotBusy, Source={x:Reference Name=todopage}}"
+                                             Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:TodoViewModel}}, Path=EditTodoCommand}"
+                                                    CommandParameter="{Binding .}" Margin="0, 10, 10, 10" VerticalOptions="Center" BackgroundColor="Green"/>
+                                        <Button Grid.Column="2" Text="Delete" BackgroundColor="OrangeRed" TextColor="#eee"
+                                             IsEnabled="{Binding Path=BindingContext.IsNotBusy, Source={x:Reference Name=todopage}}"
+                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:TodoViewModel}}, Path=DeleteTodoCommand}"
+                                                     CommandParameter="{Binding .}" Margin="0, 10" VerticalOptions="Center"/>
+                                    </Grid>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+
+                    </CollectionView>
+            </VerticalStackLayout>
+
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
