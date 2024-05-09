@@ -24,14 +24,16 @@ namespace todoapp.ViewModels
         private string _emptyText;
 
         private readonly ITodoService _todoService;
+        private readonly AuthViewModel _authViewModel;
 
-        public TodoViewModel(ITodoService todoService)
+        public TodoViewModel(ITodoService todoService, AuthViewModel authViewModel)
         {
             _todoService = todoService;
             TodoList = new ObservableCollection<Todo>();
             EmptyText = "No todos here. Add new Todo to get started 💪";
             TodoEntryText = "";
             Username = string.Empty;
+            _authViewModel = authViewModel;
         }
 
         public async Task Init()
@@ -60,7 +62,12 @@ namespace todoapp.ViewModels
                 {
                     TodoList.Add(todo);
                 }
-            } catch(Exception e)
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                await _authViewModel.LogoutAsync();
+            }
+            catch (Exception e)
             {
                 await App.Current.MainPage.DisplayAlert("Error", e.Message, "Ok");
             }
@@ -80,6 +87,10 @@ namespace todoapp.ViewModels
                 if (await _todoService.SaveTodoAsync(todo, false))
                     GetTodos();
             }
+            catch (UnauthorizedAccessException e)
+            {
+                await _authViewModel.LogoutAsync();
+            }
             catch (Exception e)
             {
                 Console.WriteLine(e.StackTrace);
@@ -98,9 +109,16 @@ namespace todoapp.ViewModels
             {
                 Todo todo = new Todo() { content = TodoEntryText };
                 TodoEntryText = "";
+                if(todo.content == null || todo.content == string.Empty)
+                    await App.Current.MainPage.DisplayAlert("Error", "Content cannot be empty", "Ok");
                 if (await _todoService.SaveTodoAsync(todo, true))
                     GetTodos();
-            } catch(Exception e)
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                await _authViewModel.LogoutAsync();
+            }
+            catch (Exception e)
             {
                 Console.WriteLine(e.StackTrace);
                 await App.Current.MainPage.DisplayAlert("Error", e.Message, "Ok");
@@ -124,7 +142,12 @@ namespace todoapp.ViewModels
                     if (await _todoService.SaveTodoAsync(todo, false))
                         GetTodos();
                 }
-            } catch (Exception e)
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                await _authViewModel.LogoutAsync();
+            }
+            catch (Exception e)
             {
                 Console.WriteLine(e.StackTrace);
                 await App.Current.MainPage.DisplayAlert("Error", e.Message, "Ok");
@@ -142,6 +165,10 @@ namespace todoapp.ViewModels
             {
                 if (await _todoService.DeleteTodoAsync(todo))
                     TodoList.Remove(todo);
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                await _authViewModel.LogoutAsync();
             }
             catch (Exception e)
             {

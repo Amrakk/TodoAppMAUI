@@ -66,7 +66,6 @@ namespace todoapp.Services
                 );
 
                 HttpResponseMessage res = await _client.PostAsync("signup", content);
-                Console.WriteLine(res.Content.ReadAsStringAsync().Result);
                 if (res.IsSuccessStatusCode)
                 {
                     return new ServiceResponse()
@@ -95,17 +94,78 @@ namespace todoapp.Services
 
         public async Task LogoutAsync()
         {
-            await _client.PostAsync("logout", null);
+            try
+            {
+                await _client.PostAsync("logout", null);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return;
+            }
         }
 
-        public async Task<ServiceResponse> ResetPassword(string email, string otp, string newPassword)
+        public async Task<ServiceResponse> ResetPasswordAsync(string email, string otp, string newPassword)
         {
-            throw new NotImplementedException();
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "reset-password");
+            request.Content = new StringContent(JsonSerializer.Serialize(new { email, otp, password = newPassword }), Encoding.UTF8, "application/json");
+
+            try
+            {
+                HttpResponseMessage res = await _client.SendAsync(request);
+                if (res.IsSuccessStatusCode)
+                {
+                    return new ServiceResponse()
+                    { Status = Status.Success, Message = "Password reset successful" };
+                }
+                else if (res.StatusCode == HttpStatusCode.Forbidden)
+                {
+                    return new ServiceResponse()
+                    { Status = Status.Failed, Message = "Invalid OTP" };
+                }
+                else
+                {
+                    return new ServiceResponse()
+                    { Status = Status.Error, Message = "Internal Server Error" };
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return new ServiceResponse()
+                { Status = Status.Error, Message = "Internal Client Error" };
+            }
         }
 
-        public async Task<ServiceResponse> ForgotPassword(string email)
+        public async Task<ServiceResponse> ForgotPasswordAsync(string email)
         {
-            throw new NotImplementedException();
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "forgot-password");
+            request.Content = new StringContent(JsonSerializer.Serialize(new { email }), Encoding.UTF8, "application/json");
+
+            try
+            {
+                HttpResponseMessage res = await _client.SendAsync(request);
+                if (res.IsSuccessStatusCode)
+                {
+                    return new ServiceResponse()
+                    { Status = Status.Success, Message = "Verification OTP sent to your email" };
+                }
+                else if (res.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return new ServiceResponse()
+                    { Status = Status.Failed, Message = "Email not found" };
+                }
+                else
+                {
+                    return new ServiceResponse()
+                    { Status = Status.Error, Message = "Internal Server Error" };
+                }
+            } catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return new ServiceResponse()
+                { Status = Status.Error, Message = "Internal Client Error" };
+            }
         }
 
         public async Task<bool> VerifyAsync()

@@ -1,6 +1,7 @@
-﻿using Android.Content.Res;
+﻿#if ANDROID 
+using Android.Content.Res;
 using Microsoft.Maui.Controls.Compatibility.Platform.Android;
-using todoapp.ViewModels;
+#endif 
 
 namespace todoapp
 {

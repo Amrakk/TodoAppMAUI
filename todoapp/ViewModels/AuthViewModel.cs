@@ -16,10 +16,7 @@ namespace todoapp.ViewModels
         private SignupModel _signupModel;
 
         [ObservableProperty]
-        private ResetPasswordModel _forgotPasswordModel;
-
-        [ObservableProperty]
-        private string _email;
+        private ResetPasswordModel _resetPasswordModel;
 
         [ObservableProperty]
         private string? _errorMessages;
@@ -34,9 +31,8 @@ namespace todoapp.ViewModels
             _authService = authService;
             _loginModel = new ();
             _signupModel = new ();
-            _forgotPasswordModel = new ();
+            _resetPasswordModel = new ();
             _isAuthenticated = false;
-            _email = "";
             _loginModel.Username = Preferences.Get("username", "");
         }
 
@@ -127,9 +123,99 @@ namespace todoapp.ViewModels
         }
 
         [RelayCommand]
+        public async Task ResetPassword()
+        {
+            
+            var Password = ResetPasswordModel.Password;
+            var ConfirmPassword = ResetPasswordModel.ConfirmPassword;
+
+            if (string.IsNullOrEmpty(Password) || string.IsNullOrEmpty(ConfirmPassword))
+            {
+                ErrorMessages = "All fields are required";
+                return;
+            }
+
+            if(!Regex.IsMatch(Password, @"^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])[a-zA-Z0-9]{8,}$"))
+            {
+                ErrorMessages = "Password must contain at least 1 uppercase letter, 1 lowercase letter, 1 number and be at least 8 characters long";
+                return;
+            }
+
+            if (Password != ConfirmPassword)
+            {
+                ErrorMessages = "Passwords do not match";
+                return;
+            }
+
+            ErrorMessages = "";
+            await Task.Delay(250);
+            await App.Current.MainPage.DisplayAlert("Success", "Verification OTP sent to your email!", "OK");
+            await Shell.Current.GoToAsync(nameof(VerifyOTPPage));
+        }
+
+
+        [RelayCommand]
+        public async Task ForgotPassword()
+        {
+            var Email = ResetPasswordModel.Email;
+
+            if (string.IsNullOrEmpty(Email))
+            {
+                ErrorMessages = "Email is required";
+                return;
+            }
+
+            if (!Regex.IsMatch(Email, @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$"))
+            {
+                ErrorMessages = "Invalid email address";
+                return;
+            }
+
+            ServiceResponse result = await _authService.ForgotPasswordAsync(Email);
+            if (result.Status == Status.Success)
+            {
+                ErrorMessages = "";
+                await Shell.Current.GoToAsync(nameof(ResetPasswordPage));
+                return;
+            }
+            else if (result.Status == Status.Error) ErrorMessages = "Oops! Something went wrong. Please try again later";
+            else ErrorMessages = result.Message;
+        }
+
+        [RelayCommand]
+        public async Task VerifyOTP()
+        {
+            var Email = ResetPasswordModel.Email;
+            var Otp = ResetPasswordModel.Otp;
+            var Password = ResetPasswordModel.Password;
+
+            if (string.IsNullOrEmpty(Otp) || Otp.Length != 6)
+            {
+                ErrorMessages = "Invalid OTP";
+                return;
+            }
+
+            ServiceResponse result = await _authService.ResetPasswordAsync(Email, Otp, Password);
+            if (result.Status == Status.Success)
+            {
+                ErrorMessages = "";
+                await App.Current.MainPage.DisplayAlert("Success", "Password reset successfully!", "OK");
+                await Shell.Current.GoToAsync(nameof(LoginPage));
+                return;
+            }
+            else if (result.Status == Status.Error) ErrorMessages = "Oops! Something went wrong. Please try again later";
+            else ErrorMessages = result.Message;
+        }
+
+
+
+        [RelayCommand]
         public async Task NavigateToSignup()
         {
-            Console.WriteLine("Navigating to Signup");
+            SignupModel.Email = "";
+            SignupModel.Username = "";
+            SignupModel.Password = "";
+            SignupModel.ConfirmPassword = "";
             ErrorMessages = "";
             await Shell.Current.GoToAsync(nameof(SignupPage));
         }
@@ -137,8 +223,20 @@ namespace todoapp.ViewModels
         [RelayCommand]
         public async Task NavigateToLogin()
         {
+            LoginModel.Password = "";
             ErrorMessages = "";
             await Shell.Current.GoToAsync(nameof(LoginPage));
+        }
+
+        [RelayCommand]
+        public async Task NavigateToForgotPassword()
+        {
+            ResetPasswordModel.Email = "";
+            ResetPasswordModel.Otp = "";
+            ResetPasswordModel.Password = "";
+            ResetPasswordModel.ConfirmPassword = "";
+            ErrorMessages = "";
+            await Shell.Current.GoToAsync(nameof(ForgotPasswordPage));
         }
 
         public async Task<bool> IsAuthenticatedAsync()

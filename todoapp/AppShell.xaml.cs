@@ -12,6 +12,10 @@ namespace todoapp
 
             Routing.RegisterRoute(nameof(LoginPage), typeof(LoginPage));
             Routing.RegisterRoute(nameof(SignupPage), typeof(SignupPage));
+            Routing.RegisterRoute(nameof(VerifyOTPPage), typeof(VerifyOTPPage));
+            Routing.RegisterRoute(nameof(ResetPasswordPage), typeof(ResetPasswordPage));
+            Routing.RegisterRoute(nameof(ForgotPasswordPage), typeof(ForgotPasswordPage));
+
         }
     }
 }

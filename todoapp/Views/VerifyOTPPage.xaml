@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="todoapp.Views.VerifyOTPPage"
+             xmlns:viewmodel="clr-namespace:todoapp.ViewModels"
+             xmlns:pinview="clr-namespace:PINView.Maui;assembly=PINView.Maui"
+             x:DataType="viewmodel:AuthViewModel"
+             Shell.NavBarIsVisible="False"
+             Title="VerifyOTPPage">
+
+    <Grid BackgroundColor="#FAFAFA" Margin="0" Padding="0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="220" />
+            <RowDefinition Height="500" />
+            <RowDefinition Height="50" />
+        </Grid.RowDefinitions>
+
+
+        <StackLayout>
+            <Frame BorderColor="Transparent" HeightRequest="150" WidthRequest="150" Padding="0" Margin="0, 100, 0, 0" HorizontalOptions="Center">
+                <Image Source="received.png" Aspect="AspectFit"></Image>
+            </Frame>
+        </StackLayout>
+
+        <Grid RowSpacing="5" Grid.Row="1" Margin="20,20,20,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="125" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="40" />
+                <RowDefinition Height="40" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Label Grid.Row="2" Text="Please Enter Verification OTP Sent To Your Email" Padding="22, 0" HorizontalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" MaxLines="2" FontAttributes="Bold" FontSize="Medium"/>
+
+            <StackLayout Grid.Row="3" Orientation="Vertical" HorizontalOptions="FillAndExpand">
+                <Frame BackgroundColor="Transparent" BorderColor="Transparent" Padding="0" HorizontalOptions="FillAndExpand" >
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                        <pinview:PINView
+                            BoxBackgroundColor="#996495ED"
+                            BoxShape="RoundCorner"
+                            PINLength="6"
+                            PINEntryCompletedCommand="{Binding VerifyOTPCommand}"
+                            PINValue="{Binding ResetPasswordModel.Otp}"
+                            AutoDismissKeyboard="True"
+                            BoxFocusColor="Transparent"
+                            FontAttributes="Bold"
+                            BoxSize="55"
+                            Color="White" />
+                    </StackLayout>
+                </Frame>
+
+                <Label Text="{Binding ErrorMessages}" IsVisible="{Binding ErrorMessages, Converter={StaticResource StringLengthToVisibilityConverter}}" TextColor="Red" Margin="0,12,0,15" HorizontalOptions="Center" />
+                <Button Text="RESET PASSWORD" Command="{Binding VerifyOTPCommand}" FontAttributes="Bold" FontSize="Body" CornerRadius="25" HeightRequest="75" WidthRequest="300" />
+
+                <StackLayout Orientation="Vertical" Margin="0,60,0,0" Padding="0">
+                    <Frame Padding="0" BorderColor="Transparent" BackgroundColor="#FAFAFA">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding NavigateToLoginCommand}"/>
+                        </Frame.GestureRecognizers>
+                        <Label Text="Back to Login" TextDecorations="Underline" TextColor="DarkBlue" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center" FontSize="Small" />
+                    </Frame>
+                    <Frame Padding="0" BorderColor="Transparent" BackgroundColor="#FAFAFA">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding NavigateToSignupCommand}"/>
+                        </Frame.GestureRecognizers>
+                        <StackLayout Orientation="Horizontal" Margin="0,5,0,0" Padding="0" HorizontalOptions="CenterAndExpand">
+                            <Label Text="New User?" TextColor="DarkGray" FontSize="Small" />
+                            <Label Text=" Signup" TextColor="DarkBlue" FontSize="Small" FontAttributes="Bold" />
+                        </StackLayout>
+                    </Frame>
+                </StackLayout>
+            </StackLayout>
+        </Grid>
+
+    </Grid>
+
+</ContentPage>

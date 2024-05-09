@@ -7,8 +7,8 @@ namespace todoapp.Services
         Task<ServiceResponse> LoginAsync(string username, string password);
         Task<ServiceResponse> SignupAsync(string email, string username, string password);
         Task LogoutAsync();
-        Task<ServiceResponse> ForgotPassword(string email);
-        Task<ServiceResponse> ResetPassword(string email, string otp, string newPassword);
+        Task<ServiceResponse> ForgotPasswordAsync(string email);
+        Task<ServiceResponse> ResetPasswordAsync(string email, string otp, string newPassword);
         Task<bool> VerifyAsync();
     }
 }

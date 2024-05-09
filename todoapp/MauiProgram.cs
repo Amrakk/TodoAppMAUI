@@ -13,6 +13,9 @@ namespace todoapp
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+#if ANDROID
+                .ConfigureMauiHandlers(handlers => handlers.AddHandler<Entry, PINView.Maui.Platforms.Android.Handlers.EntryHandler>())
+#endif
                 .UseMauiCommunityToolkit()
                 .ConfigureFonts(fonts =>
                 {
@@ -32,12 +35,14 @@ namespace todoapp
             builder.Services.AddSingleton<AuthViewModel>();
             builder.Services.AddSingleton<TodoViewModel>();
 
-            builder.Services.AddTransient<LoginPage>();
-            builder.Services.AddTransient<SignupPage>();
-            //builder.Services.AddSingleton<ForgotPasswordPage>();
-            //builder.Services.AddSingleton<ResetPasswordPage>();
             builder.Services.AddTransient<TodosPage>();
             builder.Services.AddTransient<LoadingPage>();
+
+            builder.Services.AddTransient<LoginPage>();
+            builder.Services.AddTransient<SignupPage>();
+            builder.Services.AddTransient<VerifyOTPPage>();
+            builder.Services.AddTransient<ResetPasswordPage>();
+            builder.Services.AddSingleton<ForgotPasswordPage>();
 
             return builder.Build();
         }

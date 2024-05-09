@@ -25,16 +25,13 @@ namespace todoapp.Services
                 RestService.SaveCookies(res);
                 return JsonSerializer.Deserialize<GetTodoResponse>(json: content)!.todos;
             } else if(res.StatusCode == HttpStatusCode.Unauthorized)
-            {
-                // TODO: Handle unauthorized
-                Console.WriteLine("Unauthorized");
-            }
+                throw new UnauthorizedAccessException();
+
             return new List<Todo>();
         }
 
         public async Task<bool> SaveTodoAsync(Todo todo, bool isNewItem)
         {
-            var message = isNewItem ? "Add failed" : "Update failed";
             HttpRequestMessage request;
             if(isNewItem) 
                 request = new(HttpMethod.Post, "todos");
@@ -55,16 +52,10 @@ namespace todoapp.Services
             if (res.IsSuccessStatusCode)
             {
                 RestService.SaveCookies(res);
-                message = isNewItem ? "Add success" : "Update success";
-                await App.Current.MainPage.DisplayAlert("", message, "OK");
                 return true;
             }
             else if(res.StatusCode == HttpStatusCode.Unauthorized)
-            {
-                // TODO: Handle unauthorized
-                Console.WriteLine("Unauthorized");
-            }
-            else await App.Current.MainPage.DisplayAlert("", message, "OK");
+                throw new UnauthorizedAccessException();
             return false;
         }
 
@@ -83,15 +74,10 @@ namespace todoapp.Services
             if (res.IsSuccessStatusCode)
             {
                 RestService.SaveCookies(res);
-                await App.Current.MainPage.DisplayAlert("", "Delete success", "OK");
                 return true;
             }
             else if (res.StatusCode == HttpStatusCode.Unauthorized)
-            {
-                // TODO: Handle unauthorized
-                Console.WriteLine("Unauthorized");
-            }
-            else await App.Current.MainPage.DisplayAlert("", "Delete failed", "OK");
+                throw new UnauthorizedAccessException();
             return false;
         }
     }

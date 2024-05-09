@@ -57,9 +57,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Images\checklock.png" />
 	  <None Remove="Resources\Images\confirmpassword.png" />
 	  <None Remove="Resources\Images\email.png" />
 	  <None Remove="Resources\Images\lock.png" />
+	  <None Remove="Resources\Images\paperplane.png" />
+	  <None Remove="Resources\Images\received.png" />
 	  <None Remove="Resources\Images\todologo.png" />
 	  <None Remove="Resources\Images\user.png" />
 	</ItemGroup>
@@ -71,9 +74,16 @@
 		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.21" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.21" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
+		<PackageReference Include="PINView.MAUI" Version="1.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Views\ForgotPasswordPage.xaml.cs">
+	    <DependentUpon>ForgotPasswordPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\ResetPasswordPage.xaml.cs">
+	    <DependentUpon>ResetPasswordPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\TodosPage.xaml.cs">
 	    <DependentUpon>TodosPage.xaml</DependentUpon>
 	  </Compile>
@@ -86,14 +96,35 @@
 	  <MauiXaml Update="Views\LoginPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\ForgotPasswordPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ResetPasswordPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\SignupPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\TodosPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\VerifyOTPPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	</ItemGroup>
 
 	<ProjectExtensions><VisualStudio><UserProperties XamarinHotReloadDebuggerTimeoutExceptiontodoappHideInfoBar="True" /></VisualStudio></ProjectExtensions>
 
+	<PropertyGroup Condition="$(TargetFramework.Contains('-android')) and '$(Configuration)' == Release">
+		<AndroidKeyStore>True</AndroidKeyStore>
+
+		<AndroidSigningKeyStore>..\key.keystore</AndroidSigningKeyStore>
+		<AndroidSigningStorePass>Amrak12823</AndroidSigningStorePass>
+		<AndroidSigningKeyAlias>MauitestAlias</AndroidSigningKeyAlias>
+		<AndroidSigningKeyPass>Amrak12823</AndroidSigningKeyPass>
+		
+	</PropertyGroup>
+	
+	
+	
 </Project>

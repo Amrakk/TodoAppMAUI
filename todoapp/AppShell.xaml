@@ -17,11 +17,13 @@
         Shell.FlyoutItemIsVisible="False" />
 
     <FlyoutItem Route="MainPage" >
+        <ShellContent ContentTemplate="{DataTemplate views:TodosPage}"/>
+        
         <ShellContent ContentTemplate="{DataTemplate views:LoginPage}" />
         <ShellContent ContentTemplate="{DataTemplate views:SignupPage}"/>
-
-        <ShellContent ContentTemplate="{DataTemplate views:TodosPage}"/>
-
+        <ShellContent ContentTemplate="{DataTemplate views:VerifyOTPPage}"/>
+        <ShellContent ContentTemplate="{DataTemplate views:ResetPasswordPage}"/>
+        <ShellContent ContentTemplate="{DataTemplate views:ForgotPasswordPage}"/>
     </FlyoutItem>
 
 </Shell>
