@@ -109,9 +109,13 @@ namespace todoapp.ViewModels
             {
                 Todo todo = new Todo() { content = TodoEntryText };
                 TodoEntryText = "";
-                if(todo.content == null || todo.content == string.Empty)
-                    await App.Current.MainPage.DisplayAlert("Error", "Content cannot be empty", "Ok");
-                if (await _todoService.SaveTodoAsync(todo, true))
+                if (string.IsNullOrEmpty(todo.content))
+                    await App.Current.MainPage.DisplayAlert("Error", "Content cannot be empty", "OK");
+                else if (todo.content.Length > 100)
+                    await App.Current.MainPage.DisplayAlert("Error", "Content cannot be more than 100 characters", "OK");
+                else if (TodoList.Count >= 20)
+                    await App.Current.MainPage.DisplayAlert("Error", "You can only have 20 todos at a time", "OK");
+                else if (await _todoService.SaveTodoAsync(todo, true))
                     GetTodos();
             }
             catch (UnauthorizedAccessException e)
@@ -134,7 +138,7 @@ namespace todoapp.ViewModels
 
             try
             {
-                if (newString == null)
+                if (string.IsNullOrEmpty(newString))
                     await App.Current.MainPage.DisplayAlert("Error", "Content cannot be empty", "Ok");
                 else if (newString != todo.content)
                 {

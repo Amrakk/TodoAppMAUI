@@ -69,17 +69,17 @@
                     </StackLayout>
                 </Frame>
 
-                <Label Text="{Binding ErrorMessages}" IsVisible="{Binding ErrorMessages, Converter={StaticResource StringLengthToVisibilityConverter}}" TextColor="Red" Margin="0,12,0,15" HorizontalOptions="Center" />
+                <Label Text="{Binding ErrorMessages}" TextColor="Red" Margin="0,12,0,15" HorizontalOptions="Center" />
                 <Button Text="SIGNUP" Command="{Binding SignupCommand}" FontAttributes="Bold" FontSize="Body" CornerRadius="30" BackgroundColor="DarkBlue"></Button>
 
                 <StackLayout Orientation="Vertical" Margin="0,60,0,0" Padding="0">
-                    <Frame Padding="0" BorderColor="Transparent">
+                    <Frame Padding="0" BorderColor="Transparent" BackgroundColor="#FAFAFA">
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding NavigateToForgotPasswordCommand}"/>
                         </Frame.GestureRecognizers>
                         <Label Text="Forgot Password" TextColor="DarkBlue" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center" FontSize="Small" />
                     </Frame>
-                    <Frame Padding="0" BorderColor="Transparent">
+                    <Frame Padding="0" BorderColor="Transparent" BackgroundColor="#FAFAFA">
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding NavigateToLoginCommand}"/>
                         </Frame.GestureRecognizers>

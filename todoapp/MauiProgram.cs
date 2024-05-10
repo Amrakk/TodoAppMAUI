@@ -35,13 +35,13 @@ namespace todoapp
             builder.Services.AddSingleton<AuthViewModel>();
             builder.Services.AddSingleton<TodoViewModel>();
 
-            builder.Services.AddTransient<TodosPage>();
-            builder.Services.AddTransient<LoadingPage>();
+            builder.Services.AddSingleton<TodosPage>();
+            builder.Services.AddSingleton<LoadingPage>();
 
-            builder.Services.AddTransient<LoginPage>();
-            builder.Services.AddTransient<SignupPage>();
-            builder.Services.AddTransient<VerifyOTPPage>();
-            builder.Services.AddTransient<ResetPasswordPage>();
+            builder.Services.AddSingleton<LoginPage>();
+            builder.Services.AddSingleton<SignupPage>();
+            builder.Services.AddSingleton<VerifyOTPPage>();
+            builder.Services.AddSingleton<ResetPasswordPage>();
             builder.Services.AddSingleton<ForgotPasswordPage>();
 
             return builder.Build();
